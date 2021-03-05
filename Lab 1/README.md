@@ -124,13 +124,12 @@ Poniżej funkcja odpowiadająca za jego działanie
 
 Osobno ostylowałem kalkulator jednak inaczej wyświetla się on w przeglądarce a inaczej w telefonie
 
-[](https://imgur.com/6deFGmu)
-[](https://i.imgur.com/kzrMbul.png)
-[Imgur](https://imgur.com/6deFGmu)
+![](https://imgur.com/6deFGmu)
+![](https://i.imgur.com/kzrMbul.png)
 
 Poniżej jeszcze za zdjęcia z aplikacji
 
-[](https://i.imgur.com/bTNArql.png)
+![](https://i.imgur.com/bTNArql.png)
 
-[](https://i.imgur.com/Xg9VVPK.png)
+![](https://i.imgur.com/Xg9VVPK.png)
 
