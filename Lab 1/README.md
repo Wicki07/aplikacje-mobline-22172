@@ -126,6 +126,7 @@ Osobno ostylowałem kalkulator jednak inaczej wyświetla się on w przeglądarce
 
 [](https://imgur.com/6deFGmu)
 [](https://i.imgur.com/kzrMbul.png)
+[Imgur](https://imgur.com/6deFGmu)
 
 Poniżej jeszcze za zdjęcia z aplikacji
 
