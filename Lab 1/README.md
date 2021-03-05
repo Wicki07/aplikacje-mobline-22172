@@ -124,7 +124,7 @@ Poniżej funkcja odpowiadająca za jego działanie
 
 Osobno ostylowałem kalkulator jednak inaczej wyświetla się on w przeglądarce a inaczej w telefonie
 
-[](https://i.imgur.com/6deFGmu.png)
+[](https://imgur.com/6deFGmu)
 [](https://i.imgur.com/kzrMbul.png)
 
 Poniżej jeszcze za zdjęcia z aplikacji
