@@ -2,7 +2,7 @@
 
 ### Autor: Mateusz Wicki Grupa: 185IC_A1
 
-# Lab2 responsywne layouty + nawigacja
+# Lab3 responsywne layouty + nawigacja
 
 Do zrobienia aplikacji wykorzystałem `NavigationContainer` z pakietu **@react-navigation/native** oraz `createStackNavigator` z pakietu **@react-navigation/stack**
 
