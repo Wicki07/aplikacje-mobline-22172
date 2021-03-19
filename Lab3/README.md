@@ -26,7 +26,7 @@ Aplikacja składa się łącznie z 6 ekranów:
     └── App.js
  ```
 
-##App.js
+## App.js
 
 Główna aplikacja. Wyświetla stronę główną wykorzystaną do poprzedniej laborki
 
@@ -113,11 +113,11 @@ export default function App() {
 
 ```
 
-##Componenty 
+## Componenty 
 
 Poniżej pokazane są wszystkie komponenty wykorzystywane przez aplikację
 
-###Home.js
+### Home.js
 
 Zostane dodały jeszcze 2 opcje oraz teraz ekran ma możliwość skrolowania
 
@@ -158,7 +158,7 @@ export default function Home({ navigation }) {
   );
 }
 ```
-###Sort.js
+### Sort.js
 
 Do sortowania wykorzystałem `map()` oraz funkcje strzałkowe, poniżej ekran z widoku.
 
@@ -243,7 +243,16 @@ export default class Sort extends Component{
 }
 ```
 
-###LazyLoading.js
+### LazyLoading.js
+
+Wygląd ekranu w trakcie ładowania
+
+![image](https://user-images.githubusercontent.com/71140843/111834734-4d95e900-88f4-11eb-9f0a-099d59d2fff8.png)
+
+Wygląd ekranu po załadowaniu
+
+![image](https://user-images.githubusercontent.com/71140843/111834811-6c947b00-88f4-11eb-8b0b-bf3d4108c7c9.png)
+
 
 ```JS
 import React, {Component, Suspense} from 'react';
@@ -271,7 +280,7 @@ export default class LazyLoading extends Component {
 }
 ```
 
-###ComponentToLoad.js
+### ComponentToLoad.js
 
 ```JS
 import React, {Component} from 'react';
@@ -302,12 +311,94 @@ export default class ComponentToLoad extends Component {
     };
 }
 ```
+### FirstStepProgress.js
 
-##Style.js
+![image](https://user-images.githubusercontent.com/71140843/111835296-1247ea00-88f5-11eb-9d39-f87c70473d34.png)
 
-Wszystkie style są przniesione do osobnego pliku `style.js` 
 
 ```JS
+import React, {Component} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
+import styles from './styles'
+
+export default class FirstStepProgress extends Component {
+    render(){ 
+        return (
+            <View style={styles.content.container}>
+                <View style={styles.content.example}>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Poniżej znjduje się domyślny 'ActivityIndicator'</Text>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Bez podania koloru nie jest on wgl widoczny więc został ostylowany na czarno</Text>
+                </View>
+                <View style={styles.content.example}>
+                    <ActivityIndicator
+                        color = '#000'/>
+                </View>
+            </View>
+        )
+    };
+}
+```
+### SecondStepProgress.js
+
+![image](https://user-images.githubusercontent.com/71140843/111835321-1b38bb80-88f5-11eb-8ae0-1e3a9073abaa.png)
+
+```JS
+import React, {Component} from 'react';
+import {ActivityIndicator, Text, View} from 'react-native';
+import styles from './styles'
+
+export default class SecondStepProgress extends Component {
+    render(){ 
+        return (
+            <View style={styles.content.container}>
+                <View style={styles.content.example}>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Teraz 'ActivityIndicator'został ostylowany</Text>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Zmieniłem size na 8 można też skorzystac z 'large' oraz 'small' oraz zmieniłem kolor na neonowy róż</Text>
+                </View>
+                <View style={styles.content.example}>
+                    <ActivityIndicator
+                        size = '8'
+                        color = '#f3a'/>
+                </View>
+            </View>
+        )
+    };
+}
+```
+### ThirdStepProgress.js
+
+![image](https://user-images.githubusercontent.com/71140843/111835344-22f86000-88f5-11eb-91ab-c9173eb70761.png)
+
+```JS
+import React, {Component} from 'react';
+import { Text, View} from 'react-native';
+import { ActivityIndicator, Colors } from 'react-native-paper';
+import styles from './styles'
+
+export default class ThirdStepProgress extends Component {
+    render(){ 
+        return (
+            <View style={styles.content.container}>
+                <View style={styles.content.example}>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Teraz 'ActivityIndicator'został ostylowany</Text>
+                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Zmieniłem size na 10 można też skorzystac z 'large' oraz 'small' oraz zmieniłem kolor na neonowy róż</Text>
+                </View>
+                <View style={styles.content.example}>
+                    <ActivityIndicator 
+                        size = 'large'
+                        color = '#519'/>
+                </View>
+            </View>
+        )
+    };
+}
+```
+## Style.js
+
+Wszystkie style są przniesione do osobnego pliku `style.js` oraz były również wykorzystywane do zrobienia lab 2
+
+```JS
+
 import { StyleSheet } from 'react-native';
 
 const styles = {}
@@ -318,7 +409,8 @@ styles.home = StyleSheet.create({
         backgroundColor: '#444',
         alignItems: 'stretch',
         justifyContent: 'center',
-        marginVertical:128,
+        marginVertical:64,
+        height: 1200,
     },
     button:{
         flex: 1,
@@ -328,6 +420,7 @@ styles.home = StyleSheet.create({
         marginHorizontal: 64,
         marginVertical: 32,
         borderRadius:10,
+        height: 50,
     },
     text: {
         color:'#444',
@@ -341,6 +434,7 @@ styles.content = StyleSheet.create({
         backgroundColor: '#444',
         paddingHorizontal:32,
         paddingVertical:32,
+        height: '100%',
     },
     example:{
         flex: 1,
@@ -359,7 +453,31 @@ styles.content = StyleSheet.create({
     code:{
         color:'#000',
         fontSize:16,
-    }
+    },
+    buttons: {
+        flexDirection:'row'
+    },
+    button:{
+        backgroundColor: '#fa0',
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        marginHorizontal: 15,
+        marginVertical: 20,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 10,
+        height: "50px",
+        borderRadius:10,
+        borderColor: '#444',
+        borderWidth: 5,
+        width: 100,
+        
+    },
 });
 
 styles.nav = StyleSheet.create({
@@ -398,10 +516,3 @@ styles.nav = StyleSheet.create({
 export default styles
 ```
 
-Poniżej zrzuty ekranu z aplikacji
-
-![](https://i.imgur.com/Bxbvaxq.png)
-
-![](https://i.imgur.com/wupRAhZ.png)
-
-![](https://i.imgur.com/gK512PW.png)
