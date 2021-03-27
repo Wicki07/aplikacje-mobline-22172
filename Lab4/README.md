@@ -242,69 +242,152 @@ export default class TextInputsScreen extends Component {
 
 <img src="https://i.imgur.com/KNa8LXU.png" alt="drawing" width="250"/>
 
-Na początku wdrożyłem kod z przykładu poźniej skorzystałem z funkcji asynchronicznych by pobrać dane ze ![strony](https://jsonplaceholder.typicode.com/)
+Na początku wdrożyłem kod z przykładu poźniej skorzystałem z funkcji asynchronicznych by pobrać dane ze [strony](https://jsonplaceholder.typicode.com/users)
 
 
 ```JS
-import React, {Component, Suspense} from 'react';
-import { Text, View } from 'react-native';
+import React, {Component} from 'react';
+import {ActivityIndicator, Text, View, ScrollView} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 import styles from './styles'
 
-const OtherComponent = React.lazy(() => import('./ComponentToLoad'))
+class Select extends Component {
+    setSelectedValue = (selectedValue) => {
+        if (selectedValue){
+            this.setState({ selectedValue: selectedValue })
+        }
+    }
+    render() {
+        return (
+            <View>
+                <Picker onValueChange = {this.setSelectedValue}>
+                    {this.props.items ? this.props.items.map(item => <Picker.Item key = {item.name} label = {item.name} />) : <Picker.Item key = {0} enabled={false}/>}
+                </Picker>
+            </View>
+        )
+    }
+}
 
-export default class LazyLoading extends Component {
+export default class SelectsScreen extends Component {
+    constructor(props){
+        super(props)
+        const options = [
+            {name: 'Przykładowy' },
+            {name: 'Teksty' },
+            {name: 'Podany' },
+            {name: 'Na ' },
+            {name: 'Sztywno' }
+        ]
+        this.state = {options}
+    }
+    async componentDidMount() {
+        const responseUsers = await fetch(`https://jsonplaceholder.typicode.com/users`);
+        const jsonUsers = await responseUsers.json();
+        this.setState({ users: jsonUsers });
+
+        const responseComments = await fetch(`https://jsonplaceholder.typicode.com/comments`);
+        const jsonComments = await responseComments.json();
+        this.setState({ comments: jsonComments });
+    }
     render(){ 
         return (
             <View style={styles.content.container}>
-                <View style={styles.content.example}>
-                    <Text style={styles.content.code}>Przykład 'Lazy loading'.</Text>
-                    <Text style={styles.content.code}>Komponent ComponentToLoad jest ładowany/umieszczany za pomocą React.lazy()</Text>
-                </View>
-                <View style={styles.content.example}>
-                    <Suspense fallback={<Text>Ładowanie...</Text>}>
-                        <OtherComponent length="1000000"/>
-                    </Suspense>
-                </View>
+                <ScrollView >
+                    <View style={styles.content.example}>
+                        <Text >Zaimplementowany przykład ze strony</Text>
+                        <Picker
+                            selectedValue={this.state.options}
+                            style={{ height: 50, width: 150 }}
+                            onValueChange={(itemValue) => setSelectedValue(itemValue)}
+                        >
+                            <Picker.Item label="Java" value="java" />
+                            <Picker.Item label="JavaScript" value="js" />
+                        </Picker>
+                    </View>
+                    <View style={styles.content.example}>
+                        <Text >Domyślny Select z ustawionymi parametrami</Text>
+                        <Select  items={this.state.options}/><Text/>
+                    </View>
+                    <View style={styles.content.example}>
+                        <Text >Wyłączony Select z powodu braku elemntów</Text>
+                        <Select /><Text/>
+                    </View>
+                    <View style={styles.content.example}>
+                        <Text >Przykład z pobieraniem danych asynchronicznie</Text>
+                        <Select  items={this.state.users}/><Text/>
+                    </View>
+                    <View style={styles.content.example}>
+                        <Text >Select z pobieranymi danych asynchronicznie</Text>
+                        <Select items={this.state.comments}/><Text/>
+                    </View>
+                </ScrollView>
             </View>
         )
     };
 }
 ```
 
-### ComponentToLoad.js
+### Switch.js
+
+Na poniższym ekranie widać jedynie `switch` po naciśnięciu na niego pojawia się `modal` z losową liczbą od 0 do 100. Aby zamknąć modala należy nacisnąć na liczbę następnie modal znika a switch zostaje zmieniony
+
+<img src="https://i.imgur.com/ciaSc7Z.jpg" alt="drawing" width="250"/>
+
+<img src="https://i.imgur.com/Bx4HP4T.jpg" alt="drawing" width="250"/>
 
 ```JS
-import React, {Component} from 'react';
-import {Text, View} from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import React, {Component,useState} from 'react';
+import { ScrollView, Modal, Switch, Text, View } from 'react-native';
+import styles from './styles'
 
-export default class ComponentToLoad extends Component {
-    constructor(props){
-        super(props)
+const CustomSwitch = () => {
+    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+    return (
+        <>
+            <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isSwitchOn}
+                onRequestClose={() => {
+                    setModalVisible(!isSwitchOn);
+                }}
+            >
+                <View style={styles.modal.centeredView}>
+                    <View style={styles.modal.modalView}>
+                        <Text style={styles.modal.modalText} onPress={onToggleSwitch} >{Math.floor(Math.random()*100)}</Text>
+                    </View>
+                </View>
+            </Modal> 
+        </>
+    );
+};
 
-        const length = props.length ? props.length : 0
-        
-        const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        let result = ' ';
-        const charactersLength = characters.length;
-        for ( let i = 0; i < length; i++ ) {
-            result += characters.charAt(Math.floor(Math.random() * charactersLength));
-        }
-
-        this.state = { text: result }
-    }
+export default class SwitchScreen extends Component {
     render(){ 
         return (
-            <ScrollView>
-                <Text>{this.state.text}</Text>
-            </ScrollView>
+            <View style={styles.content.container}>
+                <ScrollView >
+                    <View style={styles.content.example}>                    
+                        <CustomSwitch/><Text/>
+                    </View>
+                </ScrollView>
+            </View>
         )
     };
 }
 ```
-### FirstStepProgress.js
 
-![image](https://user-images.githubusercontent.com/71140843/111835296-1247ea00-88f5-11eb-9d39-f87c70473d34.png)
+### DatePicker.js
+
+Poniższe screeny pokazują działanie zmiany daty <B>poniższy kod działa tylko i wyłącznie na urządzeniach z androidem</B>
+
+<img src="https://i.imgur.com/Q0S34gx.jpg" alt="drawing" width="250"/>
+
+<img src="https://i.imgur.com/QVUTh6J.jpg" alt="drawing" width="250"/>
+
+<img src="https://i.imgur.com/Nl8JW91.jpg" alt="drawing" width="250"/>
 
 
 ```JS
