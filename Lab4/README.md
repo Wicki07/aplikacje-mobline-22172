@@ -131,8 +131,8 @@ Poniżej pokazane są wszystkie komponenty wykorzystywane przez aplikację
 
 Plik `Home.js` został przystosowany do potrzeb Lab4
 
-<img src="https://i.imgur.com/HCznYjY.jpg" alt="drawing" width="200"/>
-<img src="https://i.imgur.com/abPTRYO.jpg" alt="drawing" width="200"/>
+<img src="https://i.imgur.com/HCznYjY.jpg" alt="drawing" width="250"/>
+<img src="https://i.imgur.com/abPTRYO.jpg" alt="drawing" width="250"/>
 
 ```JS
 import React, {Component} from 'react';
