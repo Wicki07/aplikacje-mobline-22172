@@ -5,7 +5,8 @@ import  Home  from './components/Home'
 import  TextInputScreen  from './components/TextInputScreen'
 import  Select  from './components/Select'
 import  Switch  from './components/Switch'
-import  ThirdStepProgress  from './components/ThirdStepProgress'
+import  DatePicker  from './components/DatePicker'
+import Toast from './components/Toast'
 
 const Stack = createStackNavigator();
 
@@ -61,7 +62,16 @@ export default function App() {
         headerTitleStyle: {
           fontSize: 30,
         },
-      }} name="ThirdStepProgress" component={ThirdStepProgress} />
+      }} name="DatePicker" component={DatePicker} />
+    <Stack.Screen options={{
+        headerStyle: {
+          backgroundColor: '#ddd',
+        },
+        headerTintColor: '#444',
+        headerTitleStyle: {
+          fontSize: 30,
+        },
+      }} name="Toast" component={Toast} />
     </Stack.Navigator>
   </NavigationContainer>
   );

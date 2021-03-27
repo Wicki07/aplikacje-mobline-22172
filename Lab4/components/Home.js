@@ -17,8 +17,11 @@ export default function Home({ navigation }) {
           <TouchableOpacity style={styles.home.button} onPress={() => navigation.push('Switch')}>
               <Text style={styles.home.text}>Switch</Text>
           </TouchableOpacity >
-          <TouchableOpacity style={styles.home.button} onPress={() => navigation.push('ThirdStepProgress')}>
-              <Text style={styles.home.text}>ThirdStepProgress</Text>
+          <TouchableOpacity style={styles.home.button} onPress={() => navigation.push('DatePicker')}>
+              <Text style={styles.home.text}>DatePicker</Text>
+          </TouchableOpacity >
+          <TouchableOpacity style={styles.home.button} onPress={() => navigation.push('Toast')}>
+              <Text style={styles.home.text}>Toast</Text>
           </TouchableOpacity >
       </View>
     </ScrollView>
