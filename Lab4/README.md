@@ -381,7 +381,7 @@ export default class SwitchScreen extends Component {
 
 ### DatePicker.js
 
-Poniższe screeny pokazują działanie zmiany daty <B>poniższy kod działa tylko i wyłącznie na urządzeniach z androidem</B>
+Poniższe screeny pokazują działanie zmiany daty <B>poniższy kod działa tylko i wyłącznie na urządzeniach z androidem</B>. Po zatwierdzeniu daty pojawia się komunikat zawierający zmienioną datę.
 
 <img src="https://i.imgur.com/Q0S34gx.jpg" alt="drawing" width="250"/>
 
@@ -392,201 +392,192 @@ Poniższe screeny pokazują działanie zmiany daty <B>poniższy kod działa tylk
 
 ```JS
 import React, {Component} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import { ScrollView, Text, View } from 'react-native';
+import DatePicker from 'react-native-datepicker'
 import styles from './styles'
 
-export default class FirstStepProgress extends Component {
+export default class DatePickerScreen extends Component {
+    constructor(props){
+        super(props)
+        this.state = {date: new Date()}
+    }
     render(){ 
         return (
             <View style={styles.content.container}>
-                <View style={styles.content.example}>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Poniżej znjduje się domyślny 'ActivityIndicator'</Text>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Bez podania koloru nie jest on wgl widoczny więc został ostylowany na czarno</Text>
-                </View>
-                <View style={styles.content.example}>
-                    <ActivityIndicator
-                        color = '#000'/>
-                </View>
-            </View>
+                <ScrollView >
+                  <View style={styles.content.example}>
+                    <DatePicker
+                        style={{width: 200}}
+                        date={this.state.date}
+                        mode="date"
+                        format="DD-MM-YYYY"
+                        placeholder="select date"
+                        androidMode="spinner"
+                        onDateChange={(date) => {
+                            this.setState({date: date});
+                            alert(this.state.date)
+                        }}
+                    /><Text/>
+                    <Text>Po naciśnięciu w datę pojawia się opcja zmiany daty poprzez przesuwanie przez odpowiednie daty(funkcja dostępna tylko na Androidzie)</Text>
+                    <Text>Domyślną datą jest data dzisiejsza</Text>
+                    <Text>Po zatwierdzeniu daty pojawia się alert z podaną data.</Text>
+                  </View>
+                </ScrollView>
+            </View >
         )
     };
 }
 ```
-### SecondStepProgress.js
 
-![image](https://user-images.githubusercontent.com/71140843/111835321-1b38bb80-88f5-11eb-8ae0-1e3a9073abaa.png)
+### Toast.js
+
+Do stworzenia elemtu `Toast` wykorzystałem modal z porzedniego ekranu po naciśnięciu na `ToastButton` pojawia sie modal z wyświetlną liczbą milisecund po których zniknie oraz pojawia sie sam toast na dole ekranu z przykładową wiadomością
+
+<img src="https://i.imgur.com/JNuQndW.jpg" alt="drawing" width="250"/>
+
 
 ```JS
-import React, {Component} from 'react';
-import {ActivityIndicator, Text, View} from 'react-native';
+import React, {Component, useEffect, useState} from 'react';
+import { ScrollView,Button, Modal,ToastAndroid, Text, View } from 'react-native';
 import styles from './styles'
 
-export default class SecondStepProgress extends Component {
-    render(){ 
-        return (
-            <View style={styles.content.container}>
-                <View style={styles.content.example}>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Teraz 'ActivityIndicator'został ostylowany</Text>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Zmieniłem size na 8 można też skorzystac z 'large' oraz 'small' oraz zmieniłem kolor na neonowy róż</Text>
-                </View>
-                <View style={styles.content.example}>
-                    <ActivityIndicator
-                        size = '8'
-                        color = '#f3a'/>
-                </View>
-            </View>
-        )
+const Toast = ({ visible, message }) => {
+    if (visible) {
+      ToastAndroid.showWithGravityAndOffset(
+        message,
+        ToastAndroid.LONG,
+        ToastAndroid.BOTTOM,
+        25,
+        50
+      );
+      return null;
+    }
+    return null;
+  };
+
+
+const ToastButton = () => {
+    const [visibleToast, setVisibleToast] = useState(false);
+    useEffect(() => setVisibleToast(false), [visibleToast]);
+    const handleButtonPress = () => {
+      setVisibleToast(true);
     };
-}
-```
-### ThirdStepProgress.js
+    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
+    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+    const [time, setTime] = useState(0);
+    var promise = null
+    const createPromise = () => {
+        var tempTime = Math.floor(Math.random()*10000)
+        setTime(tempTime)
+        promise = new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve('hide');
+            }, tempTime);
+        });
+    }
 
-![image](https://user-images.githubusercontent.com/71140843/111835344-22f86000-88f5-11eb-91ab-c9173eb70761.png)
-
-```JS
-import React, {Component} from 'react';
-import { Text, View} from 'react-native';
-import { ActivityIndicator, Colors } from 'react-native-paper';
-import styles from './styles'
-
-export default class ThirdStepProgress extends Component {
-    render(){ 
-        return (
-            <View style={styles.content.container}>
-                <View style={styles.content.example}>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Teraz 'ActivityIndicator'został ostylowany</Text>
-                    <Text style={[styles.content.code , {textAlign: 'center', fontSize: 25, fontWeight: 500,}]}>Zmieniłem size na 10 można też skorzystac z 'large' oraz 'small' oraz zmieniłem kolor na neonowy róż</Text>
+    return (
+        <View >
+            <Toast visible={visibleToast} message="Przykładowa widomość" />
+            <Button title="Toast button" onPress={() => {
+                onToggleSwitch()
+                handleButtonPress()
+                createPromise()
+                promise.then((value) => {
+                    if(value == 'hide'){
+                        setIsSwitchOn(false)
+                    }
+                });
+            }}/>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isSwitchOn}
+                onRequestClose={() => {
+                    setModalVisible(!isSwitchOn);
+                }}
+            >
+                <View style={styles.modal.centeredView}>
+                    <View style={styles.modal.modalView} >
+                        <Text style={styles.modal.modalText} onPress={onToggleSwitch} >{time} ms</Text>
+                    </View>
                 </View>
-                <View style={styles.content.example}>
-                    <ActivityIndicator 
-                        size = 'large'
-                        color = '#519'/>
-                </View>
-            </View>
-        )
-    };
+            </Modal> 
+        </View>
+    );
+};
+export default class ToastScreen extends Component {
+    render() {
+      return (
+        <View>
+            <ScrollView >
+                <ToastButton/><Text/>
+            </ScrollView>
+        </View>
+      );
+    }
 }
+
 ```
+
 ## Style.js
 
-Wszystkie style są przniesione do osobnego pliku `style.js` oraz były również wykorzystywane do zrobienia lab 2
+W pliku `style.js` dodałem następujące elemnty, odpowiadają one za ostylowanie modali oraz inputów.
 
 ```JS
 
-import { StyleSheet } from 'react-native';
-
-const styles = {}
-
-styles.home = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#444',
-        alignItems: 'stretch',
-        justifyContent: 'center',
-        marginVertical:64,
-        height: 1200,
+ styles.modal = StyleSheet.create({
+    centeredView: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: 22
     },
-    button:{
-        flex: 1,
-        backgroundColor: '#fa0',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 64,
-        marginVertical: 32,
-        borderRadius:10,
-        height: 50,
+    modalView: {
+      margin: 20,
+      backgroundColor: "white",
+      borderRadius: 20,
+      padding: 35,
+      alignItems: "center",
+      shadowColor: "#000",
+      shadowOffset: {
+        width: 0,
+        height: 2
+      },
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5
     },
-    text: {
-        color:'#444',
-        fontSize:24,
+    button: {
+      borderRadius: 20,
+      padding: 10,
+      elevation: 2
     },
-});
-
-
-styles.content = StyleSheet.create({
-    container: {
-        backgroundColor: '#444',
-        paddingHorizontal:32,
-        paddingVertical:32,
-        height: '100%',
+    buttonOpen: {
+      backgroundColor: "#F194FF",
     },
-    example:{
-        flex: 1,
-        backgroundColor: '#fa0',
-        justifyContent: 'center',
-        marginHorizontal: 16,
-        marginVertical: 32,
-        paddingHorizontal:16,
-        paddingVertical:16,
-        borderRadius:10,
+    buttonClose: {
+      backgroundColor: "#2196F3",
     },
-    text: {
-        color:'#fa0',
-        fontSize:20,
+    textStyle: {
+      color: "white",
+      fontWeight: "bold",
+      textAlign: "center"
     },
-    code:{
-        color:'#000',
-        fontSize:16,
+    modalText: {
+      marginBottom: 15,
+      textAlign: "center"
+    }
+  });
+ styles.textinput = StyleSheet.create({
+    input: {
+      height: 40,
+      borderWidth: 3,
+      borderRadius: 10,
+      padding:8,
     },
-    buttons: {
-        flexDirection:'row'
-    },
-    button:{
-        backgroundColor: '#fa0',
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        marginHorizontal: 15,
-        marginVertical: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 10,
-        height: "50px",
-        borderRadius:10,
-        borderColor: '#444',
-        borderWidth: 5,
-        width: 100,
-        
-    },
-});
-
-styles.nav = StyleSheet.create({
-    container: {
-        flexDirection: 'row',
-        backgroundColor: '#444',
-        paddingHorizontal:15,
-        paddingVertical:32,
-    },
-    text: {
-        color:'#000',
-        fontSize:20,
-        textAlign: 'center',
-    },
-    button:{
-        flex:1,
-        backgroundColor: '#fa0',
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginHorizontal: 15,
-        marginVertical: 20,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 10,
-        height:100,
-        borderRadius:10,
-    },
-});
+  });
   
 
-export default styles
 ```
 
