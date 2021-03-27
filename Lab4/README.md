@@ -165,100 +165,84 @@ export default function Home({ navigation }) {
   );
 }
 ```
-### Sort.js
+### TextInput.js
 
-Do sortowania wykorzystałem `map()` oraz funkcje strzałkowe, poniżej ekran z widoku.
+Do stworzenia `TextImput` skorzystałem z przykładów z dokumentacji oraz na ich podstawie i inforamcji zawartych w dokumnetacji stworzyłem własne
 
-![](https://i.imgur.com/VFRS3dS.png)
-![](https://i.imgur.com/G0fDLKK.png)
-![image](https://user-images.githubusercontent.com/71140843/111834371-cba5c000-88f3-11eb-8b47-3e8783ef5b65.png)
+<img src="https://i.imgur.com/Yckw123.jpg" alt="drawing" width="250"/>
+
+Jedynie input z wieloma liniami pozwala na przejscie do następnej lini czyli przycisk w lewym dolnym rogu ekranu
+
+<img src="https://i.imgur.com/ZVbZ3Jl.jpg" alt="drawing" width="250"/>
+
+Na poniższym przykładzie widać alert który pojawia się po zakończeniu wpisywania tekstu, tekst w alercie pobierany jest z inputa
+
+<img src="https://i.imgur.com/ifAQYpB.jpg" alt="drawing" width="250"/>
+
+Poniżej pokazany jest przykład umożliwiajacy jedynie wprowadzanie cyfr
+
+<img src="https://i.imgur.com/zF8dcUA.jpg" alt="drawing" width="250"/>
 
 
 ```JS
 import React, {Component} from 'react';
-import { TouchableOpacity, Text, View } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, Text, TextInput, View } from 'react-native';
 import styles from './styles'
 
+export default class TextInputsScreen extends Component {
+    render(){ 
+        return (
+            <>
+                <View style={styles.content.container}>
+                <ScrollView >
+                    <View style={styles.content.example}>
+                        <Text >Podstawowy TextInput</Text>
+                        <TextInput style={styles.textinput.input} /><Text/>
+                    </View>
+                    <View style={styles.content.example}>
+                      <Text >TextInput z automatycznym formatowaniem autoCapitalize="words"</Text>
+                      <TextInput style={styles.textinput.input} autoCapitalize="words" />
+                  </View>
+                  <View style={styles.content.example}>
+                      <Text >TextInput z ustawionym value W momencie kiedy ustawiona jest wartość value tekstu nie można edytować</Text>
+                      <TextInput style={styles.textinput.input} value="Przykładowy tekst" />
+                  </View>
+                  <View style={styles.content.example}>
+                      <Text >TextInput z wartością domyślną defaultValue="Default Value" tą wartość można edytować</Text>
+                      <TextInput style={styles.textinput.input} defaultValue="Default Value" />
+                  </View>
+                  <View style={styles.content.example}>
+                      <Text >TextInput z wyłączoną możliwością edycji</Text>
+                      <TextInput style={styles.textinput.input} editable={false} />
+                  </View>
+                  <View style={styles.content.example}>
+                      <Text >TextInput uruchamiający klawiaturę numeryczną keyboardType="numeric"</Text>
+                      <TextInput style={styles.textinput.input} keyboardType="numeric" />
+                  </View>
 
-const Numbers = ({ liczby }) => {
-  var index = 0
-  console.log(liczby)
-    return (
-        <ScrollView >
-          {liczby.map(liczba => <Text key={index++} >{liczba}</Text>)}
-        </ScrollView>
-    );
-};
-
-export default class Sort extends Component{
-  constructor(){
-    super();
-    const arr = []; 
-    const sorted = false;
-    for (let i = 0; i < 100; i++) {
-      arr.push(Math.floor(Math.random() * 1000) + 1);
-    }
-    this.state = { 
-      arr 
+                  <View style={styles.content.example}>
+                      <Text >TextInput z wieloma liniami multiline=true ustalamy ilość lini na 5 numberOfLines=5</Text>
+                      <TextInput style={styles.textinput.input} multiline={true} numberOfLines={5}/>
+                  </View>
+                  <View style={styles.content.example}>
+                      <Text >TextInput z przykładową metodą wyswietlającą alert</Text>
+                      <TextInput style={styles.textinput.input} onEndEditing={event =>{alert(event.nativeEvent.text)}} />
+                  </View>
+                </ScrollView>
+                </View>
+            </>
+        )
     };
-  }
-  sort = () =>{
-    if(!this.state.sorted){
-      this.state.arr.sort((a,b) => a > b ? 1:-1)
-      this.state.sorted = true
-    }
-    else {
-      this.state.arr.sort((a,b) => a > b ? -1:1)
-      this.state.sorted = false
-    }
-    this.forceUpdate()
-  }
-  randomize = () =>{
-    console.log(this.state.arr)
-    const newarr = []
-    for (let i = 0; i < this.state.arr.length; i++) {
-      newarr.push(Math.floor(Math.random() * 1000) + 1);
-    }
-    this.state.arr = newarr
-    this.state.sorted = false
-    this.forceUpdate()
-  }
-  
-  render(){ 
-    return (
-        <View style={styles.content.container}>
-          <View style={styles.content.example}>
-            <View >
-                <Text style={styles.content.code}>Wyświetlanie i sortowanie liczb z przedziału od 1 do 1000. Drugie naciśnięcie sortowania posortuje listę malejąco</Text>
-            </View>
-            <View style={styles.content.buttons}>
-                <TouchableOpacity  onPress={this.sort}>
-                    <Text style={styles.content.button}>Sortuj</Text>
-                </TouchableOpacity>
-                <TouchableOpacity  onPress={this.randomize}>
-                    <Text style={styles.content.button}>Randomizuj</Text>
-                </TouchableOpacity>
-            </View>
-          </View>
-            <View style={styles.content.example} >
-                <Numbers  liczby={this.state.arr} />
-            </View>
-        </View>
-    )
-};
 }
 ```
 
-### LazyLoading.js
+### Select.js
 
-Wygląd ekranu w trakcie ładowania
+`Select` sprawił osobiscie wiele problemów dlatego zamieszczony screen jest z przeglądarki nie z aplikacji. Przy próbie wybrania w aplikacji select aplikacja samoistnie się zamykała nie pokazajuąc żadnego błędu
 
-![image](https://user-images.githubusercontent.com/71140843/111834734-4d95e900-88f4-11eb-9f0a-099d59d2fff8.png)
+<img src="https://i.imgur.com/KNa8LXU.png" alt="drawing" width="250"/>
 
-Wygląd ekranu po załadowaniu
-
-![image](https://user-images.githubusercontent.com/71140843/111834811-6c947b00-88f4-11eb-8b0b-bf3d4108c7c9.png)
+Na początku wdrożyłem kod z przykładu poźniej skorzystałem z funkcji asynchronicznych by pobrać dane ze ![strony](https://jsonplaceholder.typicode.com/)
 
 
 ```JS
