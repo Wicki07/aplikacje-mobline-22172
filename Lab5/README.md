@@ -146,413 +146,350 @@ Do stworzenia `ScrollView` skorzystałem z przykładów z dokumentacji oraz na i
 
 <img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/170998975_261101455709377_4440658677228836891_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=ae9488&_nc_ohc=huzORjCtngwAX9-L2OZ&_nc_ht=scontent-waw1-1.xx&tp=7&oh=f05c77d1a36d824a6e46ce89c7e1b464&oe=609822DC" alt="drawing" width="250"/>
 
-Jedynie input z wieloma liniami pozwala na przejscie do następnej lini czyli przycisk w lewym dolnym rogu ekranu
-
-<img src="https://i.imgur.com/ZVbZ3Jl.jpg" alt="drawing" width="250"/>
-
-Na poniższym przykładzie widać alert który pojawia się po zakończeniu wpisywania tekstu, tekst w alercie pobierany jest z inputa
-
-<img src="https://i.imgur.com/ifAQYpB.jpg" alt="drawing" width="250"/>
-
-Poniżej pokazany jest przykład umożliwiajacy jedynie wprowadzanie cyfr
-
-<img src="https://i.imgur.com/zF8dcUA.jpg" alt="drawing" width="250"/>
+Dostosowałem wygląd ekrany tka bay atomatycznie pobierał rozdzielczość ekranu i na jej podstawie wyznaczał wysokość elementów ScrollView
 
 
 ```JS
 import React, {Component} from 'react';
-import { ScrollView, Text, TextInput, View } from 'react-native';
+import { ScrollView, Text, View, Dimensions  } from 'react-native';
 import styles from './styles'
 
-export default class TextInputsScreen extends Component {
-    render(){ 
-        return (
-            <>
-                <View style={styles.content.container}>
-                <ScrollView >
-                    <View style={styles.content.example}>
-                        <Text >Podstawowy TextInput</Text>
-                        <TextInput style={styles.textinput.input} /><Text/>
-                    </View>
-                    <View style={styles.content.example}>
-                      <Text >TextInput z automatycznym formatowaniem autoCapitalize="words"</Text>
-                      <TextInput style={styles.textinput.input} autoCapitalize="words" />
-                  </View>
-                  <View style={styles.content.example}>
-                      <Text >TextInput z ustawionym value W momencie kiedy ustawiona jest wartość value tekstu nie można edytować</Text>
-                      <TextInput style={styles.textinput.input} value="Przykładowy tekst" />
-                  </View>
-                  <View style={styles.content.example}>
-                      <Text >TextInput z wartością domyślną defaultValue="Default Value" tą wartość można edytować</Text>
-                      <TextInput style={styles.textinput.input} defaultValue="Default Value" />
-                  </View>
-                  <View style={styles.content.example}>
-                      <Text >TextInput z wyłączoną możliwością edycji</Text>
-                      <TextInput style={styles.textinput.input} editable={false} />
-                  </View>
-                  <View style={styles.content.example}>
-                      <Text >TextInput uruchamiający klawiaturę numeryczną keyboardType="numeric"</Text>
-                      <TextInput style={styles.textinput.input} keyboardType="numeric" />
-                  </View>
-
-                  <View style={styles.content.example}>
-                      <Text >TextInput z wieloma liniami multiline=true ustalamy ilość lini na 5 numberOfLines=5</Text>
-                      <TextInput style={styles.textinput.input} multiline={true} numberOfLines={5}/>
-                  </View>
-                  <View style={styles.content.example}>
-                      <Text >TextInput z przykładową metodą wyswietlającą alert</Text>
-                      <TextInput style={styles.textinput.input} onEndEditing={event =>{alert(event.nativeEvent.text)}} />
-                  </View>
-                </ScrollView>
-                </View>
-            </>
-        )
-    };
-}
-```
-
-### Select.js
-
-`Select` sprawił osobiscie wiele problemów dlatego zamieszczony screen jest z przeglądarki nie z aplikacji. Przy próbie wybrania w aplikacji select aplikacja samoistnie się zamykała nie pokazajuąc żadnego błędu
-
-<img src="https://i.imgur.com/KNa8LXU.png" alt="drawing" width="250"/>
-
-Na początku wdrożyłem kod z przykładu poźniej skorzystałem z funkcji asynchronicznych by pobrać dane ze [strony](https://jsonplaceholder.typicode.com/users)
-
-
-```JS
-import React, {Component} from 'react';
-import {ActivityIndicator, Text, View, ScrollView} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
-import styles from './styles'
-
-class Select extends Component {
-    setSelectedValue = (selectedValue) => {
-        if (selectedValue){
-            this.setState({ selectedValue: selectedValue })
-        }
-    }
-    render() {
-        return (
-            <View>
-                <Picker onValueChange = {this.setSelectedValue}>
-                    {this.props.items ? this.props.items.map(item => <Picker.Item key = {item.name} label = {item.name} />) : <Picker.Item key = {0} enabled={false}/>}
-                </Picker>
-            </View>
-        )
-    }
-}
-
-export default class SelectsScreen extends Component {
-    constructor(props){
-        super(props)
-        const options = [
-            {name: 'Przykładowy' },
-            {name: 'Teksty' },
-            {name: 'Podany' },
-            {name: 'Na ' },
-            {name: 'Sztywno' }
-        ]
-        this.state = {options}
-    }
-    async componentDidMount() {
-        const responseUsers = await fetch(`https://jsonplaceholder.typicode.com/users`);
-        const jsonUsers = await responseUsers.json();
-        this.setState({ users: jsonUsers });
-
-        const responseComments = await fetch(`https://jsonplaceholder.typicode.com/comments`);
-        const jsonComments = await responseComments.json();
-        this.setState({ comments: jsonComments });
-    }
-    render(){ 
-        return (
-            <View style={styles.content.container}>
-                <ScrollView >
-                    <View style={styles.content.example}>
-                        <Text >Zaimplementowany przykład ze strony</Text>
-                        <Picker
-                            selectedValue={this.state.options}
-                            style={{ height: 50, width: 150 }}
-                            onValueChange={(itemValue) => setSelectedValue(itemValue)}
-                        >
-                            <Picker.Item label="Java" value="java" />
-                            <Picker.Item label="JavaScript" value="js" />
-                        </Picker>
-                    </View>
-                    <View style={styles.content.example}>
-                        <Text >Domyślny Select z ustawionymi parametrami</Text>
-                        <Select  items={this.state.options}/><Text/>
-                    </View>
-                    <View style={styles.content.example}>
-                        <Text >Wyłączony Select z powodu braku elemntów</Text>
-                        <Select /><Text/>
-                    </View>
-                    <View style={styles.content.example}>
-                        <Text >Przykład z pobieraniem danych asynchronicznie</Text>
-                        <Select  items={this.state.users}/><Text/>
-                    </View>
-                    <View style={styles.content.example}>
-                        <Text >Select z pobieranymi danych asynchronicznie</Text>
-                        <Select items={this.state.comments}/><Text/>
-                    </View>
-                </ScrollView>
-            </View>
-        )
-    };
-}
-```
-
-### Switch.js
-
-Na poniższym ekranie widać jedynie `switch` po naciśnięciu na niego pojawia się `modal` z losową liczbą od 0 do 100. Aby zamknąć modala należy nacisnąć na liczbę następnie modal znika a switch zostaje zmieniony
-
-<img src="https://i.imgur.com/ciaSc7Z.jpg" alt="drawing" width="250"/>
-
-<img src="https://i.imgur.com/Bx4HP4T.jpg" alt="drawing" width="250"/>
-
-```JS
-import React, {Component,useState} from 'react';
-import { ScrollView, Modal, Switch, Text, View } from 'react-native';
-import styles from './styles'
-
-const CustomSwitch = () => {
-    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
-    return (
-        <>
-            <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isSwitchOn}
-                onRequestClose={() => {
-                    setModalVisible(!isSwitchOn);
-                }}
-            >
-                <View style={styles.modal.centeredView}>
-                    <View style={styles.modal.modalView}>
-                        <Text style={styles.modal.modalText} onPress={onToggleSwitch} >{Math.floor(Math.random()*100)}</Text>
-                    </View>
-                </View>
-            </Modal> 
-        </>
-    );
-};
-
-export default class SwitchScreen extends Component {
-    render(){ 
-        return (
-            <View style={styles.content.container}>
-                <ScrollView >
-                    <View style={styles.content.example}>                    
-                        <CustomSwitch/><Text/>
-                    </View>
-                </ScrollView>
-            </View>
-        )
-    };
-}
-```
-
-### DatePicker.js
-
-Poniższe screeny pokazują działanie zmiany daty <B>poniższy kod działa tylko i wyłącznie na urządzeniach z androidem</B>. Po zatwierdzeniu daty pojawia się komunikat zawierający zmienioną datę.
-
-<img src="https://i.imgur.com/Q0S34gx.jpg" alt="drawing" width="250"/>
-
-<img src="https://i.imgur.com/QVUTh6J.jpg" alt="drawing" width="250"/>
-
-<img src="https://i.imgur.com/Nl8JW91.jpg" alt="drawing" width="250"/>
-
-
-```JS
-import React, {Component} from 'react';
-import { ScrollView, Text, View } from 'react-native';
-import DatePicker from 'react-native-datepicker'
-import styles from './styles'
+const WindowHeight = Dimensions.get("window");
 
 export default class DatePickerScreen extends Component {
-    constructor(props){
-        super(props)
-        this.state = {date: new Date()}
-    }
     render(){ 
         return (
-            <View style={styles.content.container}>
-                <ScrollView >
-                  <View style={styles.content.example}>
-                    <DatePicker
-                        style={{width: 200}}
-                        date={this.state.date}
-                        mode="date"
-                        format="DD-MM-YYYY"
-                        placeholder="select date"
-                        androidMode="spinner"
-                        onDateChange={(date) => {
-                            this.setState({date: date});
-                            alert(this.state.date)
-                        }}
-                    /><Text/>
-                    <Text>Po naciśnięciu w datę pojawia się opcja zmiany daty poprzez przesuwanie przez odpowiednie daty(funkcja dostępna tylko na Androidzie)</Text>
-                    <Text>Domyślną datą jest data dzisiejsza</Text>
-                    <Text>Po zatwierdzeniu daty pojawia się alert z podaną data.</Text>
-                  </View>
-                </ScrollView>
-            </View >
+                <View style={[styles.content.container, {height: WindowHeight.height}]}>
+                    <View style={[styles.content.example, {height: 150, textAlign: "center"}]}>
+                        <Text style={styles.home.text}>
+                            Pierwszy scrole view
+                        </Text>
+                    </View>
+                    <View style={[styles.content.example, {height: WindowHeight.height/2}]} >
+                        <ScrollView >
+                            <View style={[styles.flexbox.box, { backgroundColor: "powderblue" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "skyblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "steelblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "red" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "darkorange" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "green" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "purple" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "mediumslateblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "mediumturquoise" }]} />
+                        </ScrollView>
+                    </View>
+                </View >
         )
     };
 }
 ```
 
-### Toast.js
+### ScrollViewSecond.js
 
-Do stworzenia elemtu `Toast` wykorzystałem modal z porzedniego ekranu po naciśnięciu na `ToastButton` pojawia sie modal z wyświetlną liczbą milisecund po których zniknie oraz pojawia sie sam toast na dole ekranu z przykładową wiadomością
+Różnica między pierwszym a drugim ScrollView jest taka że drugi posiada custom scrollbar zaimplementowany przy pomocy `ScrollViewIndicator`
 
-<img src="https://i.imgur.com/JNuQndW.jpg" alt="drawing" width="250"/>
+<img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/171366561_488219409008141_5866888664922006604_n.jpg?_nc_cat=110&ccb=1-3&_nc_sid=ae9488&_nc_ohc=Z3xXUqlB6JEAX9VcU7V&_nc_ht=scontent-waw1-1.xx&tp=7&oh=5ce42e0f7bcab25832d2fdb2ef62e6fa&oe=60961169" alt="drawing" width="250"/>
 
 
 ```JS
-import React, {Component, useEffect, useState} from 'react';
-import { ScrollView,Button, Modal,ToastAndroid, Text, View } from 'react-native';
+import React, {Component} from 'react';
+import { ScrollView, Text, View, Dimensions  } from 'react-native';
+import ScrollViewIndicator from 'react-native-scroll-indicator';
 import styles from './styles'
 
-const Toast = ({ visible, message }) => {
-    if (visible) {
-      ToastAndroid.showWithGravityAndOffset(
-        message,
-        ToastAndroid.LONG,
-        ToastAndroid.BOTTOM,
-        25,
-        50
-      );
-      return null;
-    }
-    return null;
-  };
+const WindowHeight = Dimensions.get("window");
 
-
-const ToastButton = () => {
-    const [visibleToast, setVisibleToast] = useState(false);
-    useEffect(() => setVisibleToast(false), [visibleToast]);
-    const handleButtonPress = () => {
-      setVisibleToast(true);
+export default class DatePickerScreen extends Component {
+    render(){ 
+        return (
+                <View style={[styles.content.container, {height: WindowHeight.height}]}>
+                    <View style={[styles.content.example, {height: 150, textAlign: "center"}]}>
+                        <Text style={styles.home.text}>
+                            Drugi scrole view
+                        </Text>
+                    </View>
+                    <View style={[styles.content.example, {height: WindowHeight.height/2}]} >
+                        <ScrollViewIndicator style={styles.scrollViewIndicator} scrollViewStyle={styles.flexbox.scrollViewStyle} scrollIndicatorContainerStyle={styles.flexbox.scrollIndicatorContainerStyle} scrollIndicatorStyle={styles.flexbox.scrollIndicatorStyle} >
+                            <View style={[styles.flexbox.box, { backgroundColor: "powderblue" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "skyblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "steelblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "red" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "darkorange" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "green" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "purple" }]}/>
+                            <View style={[styles.flexbox.box, { backgroundColor: "mediumslateblue" }]} />
+                            <View style={[styles.flexbox.box, { backgroundColor: "mediumturquoise" }]} />
+                        </ScrollViewIndicator>
+                    </View>
+                </View >
+        )
     };
-    const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-    const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
-    const [time, setTime] = useState(0);
-    var promise = null
-    const createPromise = () => {
-        var tempTime = Math.floor(Math.random()*10000)
-        setTime(tempTime)
-        promise = new Promise((resolve, reject) => {
-            setTimeout(() => {
-                resolve('hide');
-            }, tempTime);
-        });
+}
+```
+
+### Touchable.js
+
+Na poniższym ekranie widać wykorzystanie opcje `TouchableOpacity` oraz `TouchableHighlight`. Dodatkowo wykorzystałem komponent WebView do stworzenia wyszukiwarki w aplikacji która otwiera wszykiwarkę Google.
+
+<img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/171031011_806098746666906_3697797357304026040_n.jpg?_nc_cat=102&ccb=1-3&_nc_sid=ae9488&_nc_ohc=QBT5MN0gYJ4AX8y-P0R&_nc_ht=scontent-waw1-1.xx&tp=7&oh=e6b4a6cb968615b69eb36f4a239fa06a&oe=609500B9" alt="drawing" width="250"/>
+
+<img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/171015131_446406799957929_9080261616772674064_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=ae9488&_nc_ohc=Wf_tZdEPVqcAX8a_zzR&_nc_ht=scontent-waw1-1.xx&tp=7&oh=19a7a1c0ff21021eab41366b4aee43b1&oe=60967447" alt="drawing" width="250"/>
+
+```JS
+import React, {Component } from 'react';
+import { ScrollView, Text, View,TouchableOpacity, TouchableHighlight, Button, TextInput, Modal  } from 'react-native';
+import {WebView} from "react-native-webview";
+import styles from './styles'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { IconButton, Colors } from 'react-native-paper';
+
+export default class TouchableScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = { 
+            countTouchableOpacity : 0,
+            countTouchableHighlight : 0,
+            searchPhasese:'',
+            showBrowser: false,
+        };
     }
 
-    return (
-        <View >
-            <Toast visible={visibleToast} message="Przykładowa widomość" />
-            <Button title="Toast button" onPress={() => {
-                onToggleSwitch()
-                handleButtonPress()
-                createPromise()
-                promise.then((value) => {
-                    if(value == 'hide'){
-                        setIsSwitchOn(false)
-                    }
-                });
-            }}/>
+    onPressTouchableOpacity = () => {
+        this.setState({
+            countTouchableOpacity: this.state.countTouchableOpacity + 1
+        });
+    };
+    onPressTouchableHighlight = () => {
+        this.setState({
+            countTouchableHighlight: this.state.countTouchableHighlight + 1
+        });
+    };
+    onPressSearch = () => {
+    };
+
+    renderBrowser() {
+        return (
             <Modal
                 animationType="slide"
-                transparent={true}
-                visible={isSwitchOn}
+                transparent={false}
+                visible={this.state.showBrowser}
                 onRequestClose={() => {
-                    setModalVisible(!isSwitchOn);
+                    this.setState({showBrowser: !showBrowser});
                 }}
             >
-                <View style={styles.modal.centeredView}>
-                    <View style={styles.modal.modalView} >
-                        <Text style={styles.modal.modalText} onPress={onToggleSwitch} >{time} ms</Text>
-                    </View>
-                </View>
-            </Modal> 
-        </View>
-    );
-};
-export default class ToastScreen extends Component {
-    render() {
-      return (
-        <View>
-            <ScrollView >
-                <ToastButton/><Text/>
-            </ScrollView>
-        </View>
-      );
+                  <IconButton
+                    icon="close"
+                    size={40}
+                    onPress={() => this.setState({showBrowser: false})}
+                />
+                <WebView
+                    source={{
+                        uri: 'https://www.google.com/search?q=' + this.state.searchPhasese,
+                    }}
+                    onNavigationStateChange={this.onNavigationStateChange}
+                    startInLoadingState
+                    scalesPageToFit
+                    javaScriptEnabled
+                    style={{ flex: 1}}
+                />
+            </Modal>
+        );
     }
-}
 
+    render(){ 
+        return (
+            <View style={styles.content.container}>
+                <View style={styles.content.example}>
+                    <Text style={styles.home.text}>Komponenty Touchable</Text>
+                </View>
+                { this.state.showBrowser && this.renderBrowser() }
+                <ScrollView >
+                    <View style={styles.content.example}>
+                        <View >
+                            <View >
+                                <TouchableOpacity
+                                    onPress={this.onPressTouchableOpacity}
+                                >
+                                    <Text style={styles.home.text}>TouchableOpacity</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View >
+                                <Text >ilość kliknięć: </Text><Text> {this.state.countTouchableOpacity}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.content.example}>
+                        <View >
+                            <View >
+                                <TouchableHighlight
+                                    onPress={this.onPressTouchableHighlight}
+                                >
+                                    <Text style={styles.home.text}>TouchableHighlight</Text>
+                                </TouchableHighlight>
+                            </View>
+                            <View >
+                                <Text >ilość kliknięć: </Text><Text> {this.state.countTouchableHighlight}</Text>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={styles.content.example}>
+                        <View >
+                            <View >
+                                <Text >Wpisz wyszukiwaną frazę</Text>
+                                <TextInput style={styles.textinput.input} onEndEditing={event =>{this.setState({searchPhasese: event.nativeEvent.text})}}/>
+                            </View>
+                            <View >
+                                <Button
+                                    title='Wyszukaj'
+                                    onPress={() => this.setState({showBrowser: true})}
+                                >
+                                </Button>
+                            </View>
+                        </View>
+                    </View>
+                </ScrollView>
+            </View>
+        )
+    };
+}
 ```
+
+### Swipeable.js
+
+Poniższe screeny pokazują działanie komponentu Swipeable po każdym przesunięciu tło napisau zmienia kolor również po wybraniu odpowiedniej opcji zmieniają się również kolory
+
+<img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/171839615_1153326865139731_5488549810560465319_n.jpg?_nc_cat=109&ccb=1-3&_nc_sid=ae9488&_nc_ohc=Ilsej2GacDkAX-2ZFC8&_nc_ht=scontent-waw1-1.xx&tp=7&oh=b8ecb596dd03d75ca54ac1ad97e42714&oe=60950E4A" alt="drawing" width="250"/>
+
+<img src="https://scontent-waw1-1.xx.fbcdn.net/v/t1.15752-9/s1080x2048/170876993_151153613593597_5965293873075540136_n.jpg?_nc_cat=104&ccb=1-3&_nc_sid=ae9488&_nc_ohc=FetfSW7I9hEAX87ogUJ&_nc_ht=scontent-waw1-1.xx&tp=7&oh=3927d9bb26e5464486a51292a2473f8e&oe=6094E0C4" alt="drawing" width="250"/>
+
+
+
+```JS
+import React, {Component} from 'react';
+import {ScrollView, Text, TouchableOpacity, View, TouchableHighlight} from 'react-native';
+import Swipeable from 'react-native-swipeable';
+import styles from './styles';
+
+
+
+export default class  SwipeScreen extends Component{
+    state = {
+        leftAction: false,
+        toggle: false
+      };
+    render() {
+    const {leftAction, toggle} = this.state;
+    const leftContent=[
+        <View style={[styles.swipeScreen.leftSwipeItem,{backgroundColor: leftAction ? '#e00' : '#0e0'}]}>
+          {leftAction ?
+            <Text>Puść!</Text> :
+            <Text>Przeciągaj dalej!</Text>}
+        </View>
+    ]
+
+    const rightButtons = [
+      <TouchableOpacity onPress={() => this.setState({toggle: !toggle})}><Text>Opcja 1</Text></TouchableOpacity>,
+      <TouchableOpacity onPress={() => this.setState({toggle: !toggle})}><Text >Opcja 2</Text></TouchableOpacity>
+    ];
+    return (
+      <ScrollView>
+        <Text style={styles.home.text}>Prosty przykład Swipeable</Text>
+        <ScrollView onScroll={this.handleScroll} >
+          <Swipeable leftActionActivationDistance={150} leftContent={leftContent} rightButtons={rightButtons} onLeftActionActivate={() => this.setState({leftAction: true})} onLeftActionDeactivate={() => this.setState({leftAction: false})} onLeftActionComplete={() => this.setState({toggle: !toggle})}>
+            <Text style={[{backgroundColor: toggle ? '#fff' : '#000', color: toggle ? '#000' : '#fff'}]}>My swipeable content</Text>
+          </Swipeable>
+        </ScrollView>
+      </ScrollView>
+    );
+  }
+}
+```
+
 
 ## Style.js
 
-W pliku `style.js` dodałem następujące elemnty, odpowiadają one za ostylowanie modali oraz inputów.
+W pliku `style.js` dodałem następujące elemnty, odpowiadają one za ostylowanie głównie swipeable oraz scrollbar.
 
 ```JS
 
- styles.modal = StyleSheet.create({
-    centeredView: {
+ styles.flexbox = StyleSheet.create({
+    container: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
-      marginTop: 22
+      marginTop: 8,
+      backgroundColor: "aliceblue",
     },
-    modalView: {
-      margin: 20,
-      backgroundColor: "white",
-      borderRadius: 20,
-      padding: 35,
-      alignItems: "center",
-      shadowColor: "#000",
-      shadowOffset: {
-        width: 0,
-        height: 2
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5
+    box: {
+      width: 100,
+      height: 100,
+    },
+    row: {
+      flexDirection: "row",
+      flexWrap: "wrap",
     },
     button: {
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2
+      paddingHorizontal: 8,
+      paddingVertical: 6,
+      borderRadius: 4,
+      backgroundColor: "oldlace",
+      alignSelf: "flex-start",
+      marginHorizontal: "1%",
+      marginBottom: 6,
+      minWidth: "48%",
+      textAlign: "center",
     },
-    buttonOpen: {
-      backgroundColor: "#F194FF",
+    selected: {
+      backgroundColor: "coral",
+      borderWidth: 0,
     },
-    buttonClose: {
-      backgroundColor: "#2196F3",
+    buttonLabel: {
+      fontSize: 12,
+      fontWeight: "500",
+      color: "coral",
     },
-    textStyle: {
+    selectedLabel: {
       color: "white",
-      fontWeight: "bold",
-      textAlign: "center"
     },
-    modalText: {
-      marginBottom: 15,
-      textAlign: "center"
-    }
-  });
- styles.textinput = StyleSheet.create({
-    input: {
-      height: 40,
-      borderWidth: 3,
-      borderRadius: 10,
-      padding:8,
+    label: {
+      textAlign: "center",
+      marginBottom: 10,
+      fontSize: 24,
+    },
+    scrollViewIndicator:{
+      alignContent:'space-between',
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    scrollIndicatorStyle:{
+        backgroundColor:'#fb1',
+    },
+    scrollIndicatorContainerStyle:{
+        backgroundColor:'#555',
+    },
+    scrollViewStyle:{
     },
   });
-  
+  styles.swipeScreen = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingTop: 80,
+      },
+      listItem: {
+        height: 90,
+        alignItems: 'center',
+        justifyContent: 'center'
+      },
+      leftSwipeItem: {
+        flex: 1,
+        alignItems: 'flex-end',
+        justifyContent: 'center',
+        paddingRight: 20
+      },
+      text:{
+          paddingTop:20,
+          fontSize:30,
+          textAlign:'center'
+      }
+});
 
 ```
 
