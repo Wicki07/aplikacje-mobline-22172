@@ -263,6 +263,7 @@ export default Mytextinput;
 Na poniższym ekranie przedstawione jest usuwanie użytkowników przypomocy ID użytkownika
 
 <img src="https://i.imgur.com/s7lc7N1.png" alt="drawing" width="250"/>
+(Przycik można spokojnie przycisnąć przybijająć piątkę :) )
 
 ```JS
 import React, { useState } from 'react';
@@ -746,6 +747,7 @@ export default ViewAllUser;
 Na poniższym ekranie przedstawione jest wyświetlanie konkretnego użytkownika użytkowników wprowadzonych do bazy 
 
 <img src="https://i.imgur.com/LcNC4ZA.png" alt="drawing" width="250"/>
+(Przycik można spokojnie przycisnąć przybijająć piątkę :) )
 
 ```JS
 import React, { useState } from 'react';
